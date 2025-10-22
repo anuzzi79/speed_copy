@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="utf-8" />
+    <title>SpeedCopy — Opções</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="options.css" />
+</head>
+
+<body>
+    <main class="container">
+        <h1>SpeedCopy — Configurações</h1>
+        <form id="form">
+            <section>
+                <label for="projeto_base">Nome do projeto base</label>
+                <input id="projeto_base" type="text" placeholder="Ex.: FGC – Projeto Base X" required />
+                <small>Será usado no filtro (coluna com aria-colindex=&quot;3&quot;).</small>
+            </section>
+
+            <section>
+                <label for="projeto_base_type">Tipo do projeto base</label>
+                <select id="projeto_base_type">
+                    <option value="Active">Active</option>
+                    <option value="Template">Template</option>
+                </select>
+                <small>Define a aba que será selecionada (Active/Template).</small>
+            </section>
+
+            <section>
+                <label for="type_exportation">Tipo de exportação</label>
+                <select id="type_exportation">
+                    <option value="Active-Active">Active - Active</option>
+                    <option value="Active-Template">Active - Template</option>
+                    <option value="Template-Active">Template - Active</option>
+                    <option value="Template-Template">Template - Template</option>
+                </select>
+                <small>Determina qual rádio (Active/Template) será marcado no modal.</small>
+            </section>
+
+            <section>
+                <label for="tipo_copia">Tipo de cópia</label>
+                <select id="tipo_copia">
+                    <option value="entire_entire">Entire Project</option>
+                    <option value="entire_exclude">Entire (Exclude)</option>
+                    <option value="phase_task_structure">Phase &amp; Task Structure</option>
+                    <option value="clear_data">Clear Data</option>
+                </select>
+                <small>Aplica as opções de cópia conforme o requerido.</small>
+            </section>
+
+            <section>
+                <label for="user_id">Seu ID</label>
+                <input id="user_id" type="text" placeholder="Ex.: QA-42" />
+                <small>Será usado para compor o nome da cópia: <code>Copy {Seu ID} {contador-do-dia}</code>.</small>
+            </section>
+
+            <div class="actions">
+                <button type="submit">Salvar</button>
+                <span id="status" role="status" aria-live="polite"></span>
+            </div>
+        </form>
+
+        <hr />
+
+        <section class="help">
+            <h2>Como usar</h2>
+            <ol>
+                <li>Preencha os campos acima e clique em <strong>Salvar</strong>.</li>
+                <li>Clique no ícone da extensão (puzzle bar → SpeedCopy). Ela abrirá <code>/main/projects</code> e
+                    executará o fluxo automaticamente.</li>
+                <li>O nome gerado segue o padrão: <code>Copy {Seu&nbsp;ID} {n}</code> — separado por espaços simples; o
+                    contador <code>n</code> reinicia a cada dia.</li>
+            </ol>
+        </section>
+    </main>
+
+    <script src="option.js"></script>
+</body>
+
+</html>

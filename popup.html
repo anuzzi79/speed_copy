@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="utf-8" />
+    <title>SpeedCopy — Slots</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="popup.css" />
+</head>
+
+<body>
+    <main class="container">
+        <header class="head">
+            <h1>Perfis de Cópia</h1>
+            <div style="display:flex; gap:6px; align-items:center;">
+                <button id="testLaunch" class="icon-btn" title="Abrir Projects em nova aba" aria-label="Test Launch">TEST</button>
+                <button id="addProfile" class="icon-btn" title="Adicionar Perfil (+)" aria-label="Adicionar Perfil">+</button>
+            </div>
+        </header>
+
+        <section id="list" class="slot-list" aria-live="polite"></section>
+
+        <footer class="foot">
+            <small>Clique em <strong>Launch</strong> para iniciar a cópia com o perfil.</small>
+        </footer>
+    </main>
+
+    <!-- Modal de Edição / Criação -->
+    <div id="modal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+        <div class="modal-content">
+            <header class="modal-head">
+                <h2 id="modalTitle">Perfil de Cópia</h2>
+                <button id="closeModal" class="close-btn" aria-label="Fechar">×</button>
+            </header>
+
+            <!-- MENSAGEM DE AJUDA -->
+            <p class="modal-tip">Clique em <strong>Launch</strong> para iniciar a cópia do perfil.</p>
+
+            <form id="profileForm" class="form">
+                <input type="hidden" id="profile_id" />
+
+                <label class="lbl" for="projeto_base">Nome do Projeto base</label>
+                <input id="projeto_base" type="text" placeholder="Ex.: FGC – Projeto Base X" required />
+
+                <label class="lbl" for="projeto_base_type">Tipo do Projeto Base</label>
+                <select id="projeto_base_type">
+                    <option value="Active">Active</option>
+                    <option value="Template">Template</option>
+                </select>
+
+                <label class="lbl" for="type_exportation">Tipo de Exportação</label>
+                <select id="type_exportation">
+                    <option value="Active-Active">Active - Active</option>
+                    <option value="Active-Template">Active - Template</option>
+                    <option value="Template-Active">Template - Active</option>
+                    <option value="Template-Template">Template - Template</option>
+                </select>
+
+                <label class="lbl" for="tipo_copia">Tipo de Cópia</label>
+                <select id="tipo_copia">
+                    <option value="entire_entire">Entire Project</option>
+                    <option value="entire_exclude">Entire (Exclude)</option>
+                    <option value="phase_task_structure">Phase &amp; Task Structure</option>
+                    <option value="clear_data">Clear Data</option>
+                </select>
+
+                <label class="lbl" for="user_id">Seu ID</label>
+                <input id="user_id" type="text" placeholder="Ex.: QA-42" />
+
+                <div class="actions">
+                    <button type="submit" class="primary">Salvar</button>
+                    <button type="button" id="cancelEdit" class="secondary">Cancelar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="popup.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,44 @@
+{
+    "manifest_version": 3,
+    "name": "SpeedCopy",
+    "description": "Automatiza a cópia de Projetos (FG Cloud) conforme perfis salvos (slots).",
+    "version": "1.2.0",
+    "icons": {
+      "16": "icons/icon16.png",
+      "32": "icons/icon32.png",
+      "48": "icons/icon48.png",
+      "128": "icons/icon128.png"
+    },
+    "action": {
+      "default_title": "SpeedCopy",
+      "default_popup": "popup.html"
+    },
+    "permissions": [
+      "storage",
+      "tabs",
+      "scripting",
+      "activeTab",
+      "clipboardWrite"
+    ],
+    "host_permissions": [
+      "https://qa2.facilitygrid.net/*"
+    ],
+    "background": {
+       "service_worker": "service_worker.js"
+    },
+    "options_page": "options.html",
+    "content_scripts": [
+      {
+        "matches": ["https://qa2.facilitygrid.net/*"],
+        "js": ["content.js"],
+        "run_at": "document_idle"
+      }
+    ],
+    "web_accessible_resources": [
+      {
+        "resources": ["icons/copy_icon.png"],
+        "matches": ["https://qa2.facilitygrid.net/*"]
+      }
+    ]
+  }
+  

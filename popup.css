@@ -1,0 +1,136 @@
+:root {
+    color-scheme: light dark;
+    --gap: 10px;
+    --radius: 10px;
+    --bg: var(--c-bg, #111);
+}
+
+html,
+body {
+    margin: 0;
+    padding: 0;
+    height: auto;
+    overflow: visible;
+}
+
+/* Popup adattivo: funziona sia come popup piccolo sia in nuova TAB */
+body {
+    min-width: 380px;
+    width: max-content;
+    max-width: none;
+    min-height: auto;
+    max-height: none;
+
+    font-family: system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, 'Helvetica Neue', Arial, 'Noto Sans', 'Apple Color Emoji', 'Segoe UI Emoji', sans-serif;
+    background: transparent;
+    overflow: visible;
+}
+
+* { box-sizing: border-box; }
+
+.container { padding: 12px; }
+
+.head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: var(--gap);
+}
+
+h1 { font-size: 16px; margin: 0; font-weight: 700; }
+
+.icon-btn {
+    width: 28px; height: 28px; border-radius: 50%;
+    border: none; font-weight: 900; cursor: pointer;
+}
+
+/* LISTA DI SLOT */
+.slot-list {
+    display: grid;
+    gap: var(--gap);
+    max-height: none;
+    overflow-y: visible;
+    padding-right: 4px;
+}
+
+.slot-list.scrollable { max-height: 450px; overflow-y: auto; }
+
+.slot {
+    border: 1px solid #444; border-radius: var(--radius); padding: 10px;
+    display: grid; grid-template-columns: 1fr auto; grid-template-rows: auto auto;
+    grid-column-gap: 8px; grid-row-gap: 6px;
+}
+
+.slot-title { font-weight: 700; margin: 0; }
+.slot-meta { grid-column: 1 / span 2; opacity: 0.85; font-size: 12px; }
+
+.slot-actions { display: flex; gap: 6px; align-items: center; justify-self: end; }
+
+/* BOTTONI AZIONE */
+.btn {
+    border: 1px solid #d0d0d0; border-radius: 10px; padding: 6px 8px;
+    cursor: pointer; display: inline-grid; place-items: center;
+    background: #f1f1f1; color: #111;
+}
+.btn:hover { background: #e9e9e9; }
+
+.btn.launch, .btn.dup, .btn.edit { background: #f1f1f1; color: #111; border-color: #d0d0d0; }
+
+.btn.del { background: #2f7d32; color: #fff; border-color: #1b5e20; }
+.btn.del:hover { background: #388e3c; }
+
+.btn img { width: 18px; height: 18px; display: block; }
+
+.foot { margin-top: 12px; opacity: 0.8; }
+
+/* ============ MODALE (quando aperto in TAB) ============ */
+.modal {
+    position: fixed; inset: 0; background: rgba(0, 0, 0, .45);
+    display: grid; place-items: center; padding: 10px; z-index: 9999;
+    max-height: none; overflow: visible;
+}
+.modal.hidden { display: none; }
+
+.modal-content {
+    background: rgba(20, 20, 20, .98); color: #fff;
+    width: max-content; min-width: 520px; max-width: none;
+    border-radius: 12px; border: 1px solid #333; padding: 12px;
+    display: flex; flex-direction: column;
+    max-height: none; overflow: visible;
+}
+
+.modal-head {
+    display: flex; align-items: center; justify-content: space-between;
+    margin-bottom: 8px; flex: 0 0 auto;
+}
+
+.modal-tip { margin: 4px 0 10px 0; opacity: .9; font-size: 13px; }
+
+.close-btn { background: transparent; border: none; color: #fff; font-size: 18px; cursor: pointer; }
+
+.form { display: grid; gap: 8px; overflow: visible; max-height: none; padding-right: 0; }
+
+.lbl { font-weight: 600; }
+
+input[type="text"], select {
+    padding: 8px 10px; border-radius: 8px; border: 1px solid #777;
+    background: transparent; color: inherit; min-width: 0; width: 100%;
+}
+
+select option { background: #333 !important; color: #fff !important; padding: 8px 10px; }
+select:focus { outline: none; border-color: #2f7d32; }
+select:focus option { background: #333 !important; color: #fff !important; }
+select option:disabled { background: #666 !important; color: #ccc !important; opacity: 0.6; }
+
+.actions {
+    display: flex; gap: 8px; margin-top: 6px;
+    position: static; background: transparent; padding-top: 0;
+}
+
+.primary, .secondary {
+    border: none; border-radius: 8px; padding: 8px 12px; font-weight: 700; cursor: pointer;
+}
+.primary { background: #2f7d32; color: #fff; }
+.secondary { background: #3b3b3b; color: #fff; }
+
+body.no-scroll { overflow: hidden; }

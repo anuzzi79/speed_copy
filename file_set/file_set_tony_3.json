@@ -1,0 +1,14 @@
+{
+  "base_dir": "C:/Users/Antonio Nuzzi/speed_copy",
+  "files": [
+    "content.js",
+    "manifest.json",
+    "option.js",
+    "options.css",
+    "options.html",
+    "popup.css",
+    "popup.html",
+    "popup.js",
+    "service_worker.js"
+  ]
+}
