@@ -522,11 +522,15 @@ async function runFastCopyFlow(settings, counterToday) {
     // === NOVO: regras específicas para Active → Active
     const isActiveBase = settings.projeto_base_type === "Active";
     const isActiveToActive = settings.type_exportation === "Active-Active";
+    const isActiveToTemplate = settings.type_exportation === "Active-Template";
+    const isTemplateBase = settings.projeto_base_type === "Template";
+    const isTemplateToActive = settings.type_exportation === "Template-Active";
+    const isTemplateToTemplate = settings.type_exportation === "Template-Template";
     const isEntireProject = settings.tipo_copia === "entire_entire";
     const isEntireExclude = settings.tipo_copia === "entire_exclude";
     const isClearData = settings.tipo_copia === "clear_data";
     // 1) Não selecionar rádio export quando for Active-Active (já vem por padrão)
-    const skipRadioSelection = isActiveBase && isActiveToActive;
+    const skipRadioSelection = isActiveBase && isActiveToActive; // per Active→Active non tocchiamo i radio
     // 2) Opções de cópia no modal
     const skipCopyOptions_EntireProject = isActiveBase && isActiveToActive && isEntireProject; // não clica nada
     const onlyExcludeOnNewProject_EntireExclude = isActiveBase && isActiveToActive && isEntireExclude; // clica só Exclude
@@ -565,6 +569,7 @@ async function runFastCopyFlow(settings, counterToday) {
     // Regras solicitadas:
     // - Active→Active + Entire Project: não clica nada
     // - Active→Active + Entire (Exclude): clica SOMENTE "Exclude On The New Project"
+    // - Active→Template: somente "Clear Data" é permitido
     async function clickClearData() {
         const label = [...document.querySelectorAll("label")].find((l) => textIncludes(l, "Clear Data"));
         if (label) await clickElement(label);
@@ -585,6 +590,21 @@ async function runFastCopyFlow(settings, counterToday) {
     } else if (onlyExcludeOnNewProject_EntireExclude) {
         await clickExcludeOnNewProject();
     } else if (onlyClearData_ClearData) {
+        await clickClearData();
+    } else if (isActiveToTemplate) {
+        // Active → Template: forçamos apenas Clear Data
+        await clickClearData();
+    } else if (isTemplateBase && isTemplateToActive && isEntireProject) {
+        // Template → Active + Entire Project: não clicar Clear/Exclude
+        // prossegue direto para Create
+    } else if (isTemplateBase && isTemplateToActive && isEntireExclude) {
+        // Template → Active + Entire (Exclude): clicar SOMENTE "Exclude On The New Project"
+        await clickExcludeOnNewProject();
+    } else if (isTemplateBase && isTemplateToActive && isClearData) {
+        // Template → Active + Clear Data: clicar explicitamente em "Clear Data"
+        await clickClearData();
+    } else if (isTemplateBase && isTemplateToTemplate && isClearData) {
+        // Template → Template + Clear Data: clicar explicitamente em "Clear Data"
         await clickClearData();
     } else {
         // comportamento anterior

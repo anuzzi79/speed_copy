@@ -55,6 +55,24 @@ function updateExportationOptions() {
     }
 }
 
+// Aggiorna le opzioni di Tipo de Cópia in base al Tipo de Exportação
+function updateTipoCopiaOptions() {
+    const exportType = f_type_exportation.value;
+    const tipoSelect = f_tipo_copia;
+
+    // Abilita tutto di default
+    for (let opt of tipoSelect.options) opt.disabled = false;
+
+    // Active → Template: consentire SOLO "Clear Data"
+    if (exportType === "Active-Template") {
+        for (let opt of tipoSelect.options) {
+            if (opt.value !== "clear_data") opt.disabled = true;
+        }
+        // forza il valore se diverso
+        if (tipoSelect.value !== "clear_data") tipoSelect.value = "clear_data";
+    }
+}
+
 function openModal(prefill = null) {
     modal.classList.remove("hidden");
     document.body.classList.add("no-scroll");
@@ -75,6 +93,7 @@ function openModal(prefill = null) {
         f_user_id.value = "";
     }
     updateExportationOptions();
+    updateTipoCopiaOptions();
     f_projeto_base.focus();
 
     requestAnimationFrame(autosizePopup);
@@ -249,7 +268,8 @@ if (testLaunchBtn) {
 closeModalBtn.addEventListener("click", closeModal);
 cancelEditBtn.addEventListener("click", closeModal);
 
-f_projeto_base_type.addEventListener("change", updateExportationOptions);
+f_projeto_base_type.addEventListener("change", () => { updateExportationOptions(); updateTipoCopiaOptions(); });
+f_type_exportation.addEventListener("change", updateTipoCopiaOptions);
 
 form.addEventListener("submit", async (e) => {
     e.preventDefault();
