@@ -15,6 +15,7 @@ const f_projeto_base_type = document.getElementById("projeto_base_type");
 const f_type_exportation = document.getElementById("type_exportation");
 const f_tipo_copia = document.getElementById("tipo_copia");
 const f_user_id = document.getElementById("user_id");
+const f_ambiente = document.getElementById("ambiente");
 
 /* ===== Autosize del popup dell’estensione (fallback quando usato come popup) ===== */
 function autosizePopup() {
@@ -33,6 +34,14 @@ async function readProfiles() {
 }
 async function writeProfiles(arr) {
     await chrome.storage.sync.set({ profiles: arr });
+}
+async function readLastEnv() {
+    const { last_env } = await chrome.storage.sync.get(["last_env"]);
+    return typeof last_env === "string" ? last_env : "";
+}
+async function writeLastEnv(env) {
+    const v = (env || "").trim();
+    if (v) await chrome.storage.sync.set({ last_env: v });
 }
 
 // ---------- UI helpers ----------
@@ -72,7 +81,7 @@ function updateTipoCopiaOptions() {
     }
 }
 
-function openModal(prefill = null) {
+async function openModal(prefill = null) {
     modal.classList.remove("hidden");
     document.body.classList.add("no-scroll");
 
@@ -83,6 +92,7 @@ function openModal(prefill = null) {
         f_type_exportation.value = prefill.type_exportation || "Active-Active";
         f_tipo_copia.value = prefill.tipo_copia || "entire_entire";
         f_user_id.value = prefill.user_id || "";
+        f_ambiente.value = prefill.ambiente || (await readLastEnv()) || "";
     } else {
         f_id.value = "";
         f_projeto_base.value = "";
@@ -90,6 +100,7 @@ function openModal(prefill = null) {
         f_type_exportation.value = "Active-Active";
         f_tipo_copia.value = "entire_entire";
         f_user_id.value = "";
+        f_ambiente.value = (await readLastEnv()) || "";
     }
     updateExportationOptions();
     updateTipoCopiaOptions();
@@ -238,14 +249,14 @@ async function handleDeepLink() {
     if (!h) return;
 
     if (h === "#new") {
-        openModal(null);
+        await openModal(null);
         return;
     }
     if (h.startsWith("#edit:")) {
         const id = decodeURIComponent(h.slice("#edit:".length));
         const arr = await readProfiles();
         const p = arr.find(x => x.id === id) || null;
-        openModal(p);
+        await openModal(p);
     }
 }
 
@@ -271,13 +282,17 @@ form.addEventListener("submit", async (e) => {
         projeto_base_type: f_projeto_base_type.value,
         type_exportation: f_type_exportation.value,
         tipo_copia: f_tipo_copia.value,
-        user_id: f_user_id.value.trim()
+        user_id: f_user_id.value.trim(),
+        ambiente: f_ambiente.value.trim()
     };
 
     if (!profile.projeto_base) {
         alert("O campo 'Nome do Projeto base' é obrigatório.");
         return;
     }
+
+    // Atualiza default de ambiente
+    await writeLastEnv(profile.ambiente);
 
     const arr = await readProfiles();
     const idx = arr.findIndex((x) => x.id === profile.id);

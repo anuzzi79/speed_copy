@@ -1,8 +1,21 @@
 // FastCopy - Service Worker (MV3)
 // Responsável por: abrir/ativar a aba FG Projects e disparar o fluxo no content.js com retries.
 
-const TARGET_URL = "https://qa2.facilitygrid.net/main/projects";
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+
+async function resolveTargetUrl(settings) {
+  const raw = (settings?.ambiente || "").toString().trim();
+  let env = raw ? raw.toLowerCase() : "";
+  if (!env) {
+    const { last_env } = await chrome.storage.sync.get(["last_env"]);
+    if (typeof last_env === "string" && last_env.trim()) {
+      env = last_env.trim().toLowerCase();
+    }
+  }
+  if (!env) env = "qa2";
+  env = env.replace(/[^a-z0-9\-]/g, "");
+  return `https://${env}.facilitygrid.net/main/projects`;
+}
 
 // ====== Contador diário ======
 async function nextDailyCounter() {
@@ -36,6 +49,7 @@ async function sendFastCopyStart(tabId, settings, counterToday) {
 
 // ====== Lançamento principal ======
 async function launchCopyWithSettings(settings) {
+  const TARGET_URL = await resolveTargetUrl(settings);
   // Abre ou ativa aba FG
   let tab;
   const tabs = await chrome.tabs.query({ url: `${TARGET_URL}*` });
