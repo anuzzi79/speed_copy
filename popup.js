@@ -3,7 +3,6 @@
 
 const listEl = document.getElementById("list");
 const addBtn = document.getElementById("addProfile");
-const testLaunchBtn = document.getElementById("testLaunch");
 
 const modal = document.getElementById("modal");
 const closeModalBtn = document.getElementById("closeModal");
@@ -63,8 +62,8 @@ function updateTipoCopiaOptions() {
     // Abilita tutto di default
     for (let opt of tipoSelect.options) opt.disabled = false;
 
-    // Active → Template: consentire SOLO "Clear Data"
-    if (exportType === "Active-Template") {
+    // Active → Template e Template → Template: consentire SOLO "Clear Data"
+    if (exportType === "Active-Template" || exportType === "Template-Template") {
         for (let opt of tipoSelect.options) {
             if (opt.value !== "clear_data") opt.disabled = true;
         }
@@ -163,7 +162,7 @@ function render(profiles) {
         bLaunch.className = "btn launch";
         bLaunch.title = "Launch";
         bLaunch.setAttribute("aria-label", "Launch");
-        bLaunch.textContent = "L"; // semplice etichetta per evitare uso icona
+        bLaunch.innerHTML = `<img src="icons/launch.png" alt="Launch" />`;
         bLaunch.addEventListener("click", () => launchProfile(p));
 
         // Duplicar
@@ -257,14 +256,6 @@ addBtn.addEventListener("click", () => {
     chrome.tabs.create({ url });
     window.close();
 });
-// Botão TEST: abre a URL de projetos em nova aba
-if (testLaunchBtn) {
-    testLaunchBtn.addEventListener("click", () => {
-        const url = "https://qa2.facilitygrid.net/main/projects";
-        chrome.tabs.create({ url });
-        window.close();
-    });
-}
 closeModalBtn.addEventListener("click", closeModal);
 cancelEditBtn.addEventListener("click", closeModal);
 
